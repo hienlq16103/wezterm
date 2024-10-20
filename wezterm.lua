@@ -13,6 +13,33 @@ config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
 config.font = wezterm.font("Iosevka Nerd Font", { weight = "Regular", stretch = "Normal", style = "Normal" })
 config.default_prog = { "pwsh.exe" }
 config.enable_scroll_bar = true
+config.colors = {
+  cursor_bg = '#52ad70',
+  cursor_fg = 'black'
+}
+config.integrated_title_button_style = "Gnome"
+config.tab_bar_at_bottom = false
+config.window_padding = {
+  left = 0,
+  right = 0,
+  top = 0,
+  bottom = 0,
+}
+
+-- Date and battery.
+wezterm.on('update-right-status', function(window, pane)
+  -- "Wed Mar 3 08:14"
+  local date = wezterm.strftime '%a %b %-d %H:%M '
+
+  local bat = ''
+  for _, b in ipairs(wezterm.battery_info()) do
+    bat = '🔋 ' .. string.format('%.0f%%', b.state_of_charge * 100)
+  end
+
+  window:set_right_status(wezterm.format {
+    { Text = bat .. '   ' .. date },
+  })
+end)
 
 mapping.add_custom_binding(config)
 
